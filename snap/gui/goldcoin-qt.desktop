@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Goldcoin Wallet
+Comment=Connect to the Goldcoin P2P Network
+Exec=goldcoin.qt %u
+Terminal=false
+Type=Application
+Icon=${SNAP}/share/pixmaps/bitcoin128.png
+MimeType=x-scheme-handler/goldcoin;
+Categories=Office;Finance;P2P;Network;Qt;
+StartupWMClass=goldcoin-qt

@@ -1,0 +1,96 @@
+name: goldcoin-core
+title: 'Goldcoin Core QT Wallet'
+version: '0.14.8'
+summary: Discover the Gold Standard of Digital Currency
+description: |
+  Goldcoin is the first Digital Gold. A super secure value store and cash payment system.
+  Fully decentralized and distributed. Fast and Free. It's the Money for a New Generation.
+  Nakamoto used the word Gold multiple times in his Bitcoin whitepaper to describe the inner
+  workings of his original protocol. We've preserved it, improved it, and made it stronger and faster.
+  Goldcoin (GLC) represents economic freedom to 8 billion people Worldwide.
+
+contact: kbicer@proton.me
+issues: https://github.com/koraycoding/goldcoin-snap/issues
+source-code: https://github.com/koraycoding/goldcoin-snap.git
+icon: snap/gui/logo.png
+license: MIT
+
+grade: stable
+confinement: strict
+base: core18
+
+apps:
+  daemon:
+    command: goldcoind
+    plugs: [home, removable-media, network, network-bind]
+    environment:
+      # Override HOME so the datadir is located at
+      # ~/snap/goldcoin/common/.goldcoin/ instead of
+      # ~/snap/goldcoin/current/.goldcoin/, and each new version of the
+      # snap won't have a different data directory:
+      # https://docs.snapcraft.io/environment-variables/7983
+      HOME: $SNAP_USER_COMMON
+  qt:
+    command: desktop-launch goldcoin-qt
+    plugs: [home, removable-media, network, network-bind, desktop, x11, unity7]
+    environment:
+      HOME: $SNAP_USER_COMMON
+      DISABLE_WAYLAND: 1
+  cli:
+    command: goldcoin-cli
+    plugs: [home, removable-media, network]
+    environment:
+      HOME: $SNAP_USER_COMMON
+  tx:
+    command: goldcoin-tx
+    environment:
+      HOME: $SNAP_USER_COMMON
+
+parts:
+  # Needed to supply desktop-launch
+  # Paste from https://github.com/ubuntu/snapcraft-desktop-helpers/blob/master/snapcraft.yaml
+  # Boilerplate seems to be required according to https://bugs.launchpad.net/snapcraft/+bug/1800057
+  desktop-qt5:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-depth: 1
+    source-subdir: qt
+    source-commit: ec861254c2a1d2447b2c589446e6cdf04c75c260
+    plugin: make
+    make-parameters: ["FLAVOR=qt5"]
+    build-packages:
+      - build-essential
+      - qtbase5-dev
+      - dpkg-dev
+    stage-packages:
+      - libgtk2.0-0
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5 # for loading icon themes which are svg
+      - try: [appmenu-qt5] # not available on core18
+      - locales-all
+      - xdg-user-dirs
+      - fcitx-frontend-qt5
+
+  goldcoin-core:
+    plugin: nil
+    override-build: | 
+      env | grep SNAP
+      wget https://github.com/koraycoding/goldcoin-snap/releases/download/${SNAPCRAFT_PROJECT_VERSION}/goldcoin-core-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
+      tar -xvf goldcoin-core-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
+      install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoind
+      install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoin-qt
+      install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoin-cli
+      install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoin-tx
+      wget https://raw.githubusercontent.com/goldcoin/goldcoin/goldcoin-master/share/pixmaps/bitcoin128.png
+      install -m 0644 -D -t $SNAPCRAFT_PART_INSTALL/share/pixmaps bitcoin128.png
+    build-packages:
+      - wget
+    after:
+      - desktop-qt5
