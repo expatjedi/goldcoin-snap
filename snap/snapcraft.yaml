@@ -1,6 +1,6 @@
 name: goldcoin-core
 title: 'Goldcoin Core QT Wallet'
-version: '0.14.9'
+version: '0.14.9.5'
 summary: Discover the Gold Standard of Digital Currency
 description: |
   Goldcoin is the first Digital Gold. A super secure value store and cash payment system.
@@ -82,7 +82,7 @@ parts:
     plugin: nil
     override-build: | 
       env | grep SNAP
-      wget https://github.com/koraycoding/goldcoin-snap/releases/download/${SNAPCRAFT_PROJECT_VERSION}/goldcoin-core-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
+      wget https://github.com/expatjedi/goldcoin-snap/releases/download/${SNAPCRAFT_PROJECT_VERSION}/goldcoin-core-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
       tar -xvf goldcoin-core-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
       install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoind
       install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoin-cli
