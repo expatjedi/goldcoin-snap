@@ -85,7 +85,6 @@ parts:
       wget https://github.com/expatjedi/goldcoin-snap/releases/download/${SNAPCRAFT_PROJECT_VERSION}/goldcoin-core-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
       tar -xvf goldcoin-core-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
       install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoind
-      install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoin-qt
       install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoin-cli
       install -m 0755 -D -t $SNAPCRAFT_PART_INSTALL/bin goldcoin-tx
       wget https://raw.githubusercontent.com/goldcoin/goldcoin/goldcoin-master/share/pixmaps/bitcoin128.png
